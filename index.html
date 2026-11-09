@@ -1,0 +1,640 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina Jewels</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        violetDark: '#2e1065',
+                        violetPrimary: '#6d28d9',
+                        violetMedium: '#7c3aed',
+                        violetSoft: '#ddd6fe',
+                        lavenderLight: '#f5f3ff',
+                        lavenderSoft: '#e9d5ff',
+                        accentPink: '#ec4899',
+                        goldAccent: '#d97706',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #faf7ff;
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(221, 214, 254, 0.7);
+        }
+
+        .glass-dark {
+            background: rgba(46, 16, 101, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f5f3ff;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c084fc;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #7c3aed;
+        }
+    </style>
+</head>
+<body class="text-slate-800 flex flex-col min-h-screen">
+
+    <!-- TOP ANNOUNCEMENT BAR -->
+    <div class="bg-gradient-to-r from-violetDark via-purple-900 to-violetDark text-white text-xs py-2 px-4 text-center font-medium tracking-wide">
+        ✨ Free Shipping on Orders Over ₱1,500 | Use Code: <span class="font-bold text-lavenderSoft underline">Lumina Jewels</span> ✨
+    </div>
+
+    <!-- MAIN NAVIGATION HEADER -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-lavenderSoft shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Brand Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer group" onclick="switchPage('home')">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-violetPrimary to-purple-800 text-white flex items-center justify-center font-bold text-lg shadow-md group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-gem text-lavenderSoft"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-serif font-bold tracking-wider text-violetDark">LUMINA<span class="text-violetPrimary font-light">JEWELS</span></span>
+                        <p class="text-[10px] tracking-widest text-violetPrimary font-bold uppercase -mt-1">Women's Accessories</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Tabs -->
+                <nav class="hidden md:flex items-center space-x-1">
+                    <button id="nav-home" onclick="switchPage('home')" class="px-5 py-2.5 rounded-full font-semibold text-sm transition text-violetDark bg-lavenderLight hover:bg-lavenderSoft">
+                        <i class="fa-solid fa-house mr-2 text-xs"></i>Home
+                    </button>
+                    <button id="nav-catalog" onclick="switchPage('catalog')" class="px-5 py-2.5 rounded-full font-semibold text-sm transition text-gray-600 hover:text-violetDark hover:bg-lavenderLight">
+                        <i class="fa-solid fa-store mr-2 text-xs"></i>10 Accessories
+                    </button>
+                    <button id="nav-cart" onclick="switchPage('cart')" class="px-5 py-2.5 rounded-full font-semibold text-sm transition text-gray-600 hover:text-violetDark hover:bg-lavenderLight relative">
+                        <i class="fa-solid fa-bag-shopping mr-2 text-xs"></i>Shopping Bag
+                        <span id="cart-badge-nav" class="ml-2 bg-violetPrimary text-white text-xs px-2 py-0.5 rounded-full font-bold">0</span>
+                    </button>
+                </nav>
+
+                <!-- Search Bar & Action Buttons -->
+                <div class="flex items-center space-x-4">
+                    <div class="relative hidden lg:block">
+                        <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search accessories..." class="w-60 pl-10 pr-4 py-2 rounded-full text-xs text-gray-800 bg-lavenderLight border border-lavenderSoft focus:outline-none focus:ring-2 focus:ring-violetPrimary transition">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-violetPrimary text-xs"></i>
+                    </div>
+
+                    <!-- Cart Icon Button -->
+                    <button onclick="switchPage('cart')" class="relative p-2 text-violetDark hover:text-violetPrimary transition focus:outline-none">
+                        <div class="w-10 h-10 rounded-full bg-lavenderLight border border-lavenderSoft flex items-center justify-center">
+                            <i class="fa-solid fa-shopping-bag text-lg text-violetDark"></i>
+                        </div>
+                        <span id="cart-badge" class="absolute -top-1 -right-1 bg-accentPink text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow">0</span>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden text-violetDark text-xl focus:outline-none p-2">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-lavenderSoft px-4 pt-3 pb-5 space-y-2 shadow-xl">
+            <div class="relative mb-3">
+                <input type="text" id="searchInputMobile" oninput="handleSearchMobile()" placeholder="Search accessories..." class="w-full pl-10 pr-4 py-2.5 rounded-full text-xs text-gray-800 bg-lavenderLight border border-lavenderSoft focus:outline-none">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-violetPrimary text-xs"></i>
+            </div>
+            <button onclick="switchPage('home')" class="block w-full text-left px-4 py-3 rounded-xl font-medium text-violetDark hover:bg-lavenderLight">Home</button>
+            <button onclick="switchPage('catalog')" class="block w-full text-left px-4 py-3 rounded-xl font-medium text-violetDark hover:bg-lavenderLight">10 Accessories Collection</button>
+            <button onclick="switchPage('cart')" class="block w-full text-left px-4 py-3 rounded-xl font-medium text-violetDark hover:bg-lavenderLight">My Shopping Bag</button>
+        </div>
+    </header>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-violetDark text-white px-5 py-4 rounded-2xl shadow-2xl z-50 transform translate-y-32 opacity-0 transition-all duration-300 flex items-center space-x-3 border border-violetMedium">
+        <div class="w-8 h-8 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center font-bold text-sm">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <span id="toast-message" class="text-sm font-medium">Item added to your bag!</span>
+    </div>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- PAGE 1: HOME PAGE -->
+        <section id="page-home" class="space-y-12">
+            <!-- Hero Banner -->
+            <div class="relative rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-r from-violetDark via-purple-950 to-indigo-950 text-white min-h-[440px] flex items-center">
+                <div class="absolute inset-0 opacity-35 bg-[url('https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1400&q=80')] bg-cover bg-center"></div>
+                <div class="absolute inset-0 bg-gradient-to-r from-violetDark via-violetDark/80 to-transparent"></div>
+                
+                <div class="relative z-10 p-8 sm:p-14 max-w-2xl">
+                    <span class="inline-block bg-lavenderSoft text-violetDark font-bold px-3.5 py-1 rounded-full text-xs uppercase tracking-widest shadow mb-3">
+                        ✨ Exclusive Women's Collection
+                    </span>
+                    <h1 class="font-serif text-4xl sm:text-6xl font-bold leading-tight">Elevate Your Everyday Style.</h1>
+                    <p class="mt-4 text-lavenderLight text-sm sm:text-base font-light leading-relaxed">
+                        Discover 10 handpicked luxury accessories designed to showcase grace, sophistication, and timeless elegance for every woman.
+                    </p>
+                    <div class="mt-8 flex flex-wrap gap-4">
+                        <button onclick="switchPage('catalog')" class="bg-gradient-to-r from-violetPrimary to-purple-600 hover:from-violetDark hover:to-purple-800 text-white font-semibold px-8 py-3.5 rounded-full shadow-lg transition transform hover:-translate-y-0.5 flex items-center">
+                            Explore 10 Accessories <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                        </button>
+                        <button onclick="scrollToFeatured()" class="bg-white/10 hover:bg-white/20 text-white border border-white/30 font-semibold px-7 py-3.5 rounded-full transition">
+                            View Top Featured
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Value Highlights -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-panel p-6 rounded-2xl flex items-center space-x-4 shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-violetPrimary/10 text-violetPrimary flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-truck-fast"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-violetDark text-sm">Fast COD Shipping</h4>
+                        <p class="text-xs text-gray-500 mt-0.5">Nationwide Cash on Delivery available</p>
+                    </div>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl flex items-center space-x-4 shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-violetPrimary/10 text-violetPrimary flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-violetDark text-sm">Premium Quality</h4>
+                        <p class="text-xs text-gray-500 mt-0.5">Crafted with hypoallergenic materials</p>
+                    </div>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl flex items-center space-x-4 shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-violetPrimary/10 text-violetPrimary flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-heart text-accentPink"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-violetDark text-sm">Made for Her</h4>
+                        <p class="text-xs text-gray-500 mt-0.5">Modern chic & timeless statement pieces</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Products Grid (Home View) -->
+            <div id="featured-section" class="pt-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8">
+                    <div>
+                        <h2 class="font-serif text-3xl font-bold text-violetDark">Trending Accessories</h2>
+                        <p class="text-xs text-gray-500 mt-1">Explore our signature 10 accessories crafted for women.</p>
+                    </div>
+                    <button onclick="switchPage('catalog')" class="text-violetPrimary font-bold text-sm hover:underline mt-2 sm:mt-0 flex items-center">
+                        View All 10 Accessories <i class="fa-solid fa-chevron-right text-xs ml-1"></i>
+                    </button>
+                </div>
+
+                <div id="home-product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <!-- Rendered via JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 2: CATALOG PAGE -->
+        <section id="page-catalog" class="hidden space-y-8">
+            <!-- Catalog Header -->
+            <div class="bg-gradient-to-r from-violetDark via-purple-900 to-indigo-950 text-white p-8 sm:p-10 rounded-3xl shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-widest text-lavenderSoft">Curated Selection</span>
+                    <h1 class="font-serif text-3xl sm:text-4xl font-bold mt-1">10 Accessories Collection</h1>
+                    <p class="text-lavenderLight text-xs sm:text-sm mt-1">Browse all 10 available luxury accessories, prices, and designs.</p>
+                </div>
+                
+                <div class="flex items-center space-x-2 bg-white/10 px-5 py-2.5 rounded-2xl border border-white/20 backdrop-blur-md">
+                    <i class="fa-solid fa-gem text-lavenderSoft text-sm"></i>
+                    <span class="text-xs font-bold text-white uppercase tracking-wider">10 Accessories Available</span>
+                </div>
+            </div>
+
+            <!-- Catalog Product Grid -->
+            <div id="catalog-product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Rendered via JavaScript -->
+            </div>
+        </section>
+
+        <!-- PAGE 3: SHOPPING CART & CHECKOUT -->
+        <section id="page-cart" class="hidden space-y-8">
+            <div class="flex items-center justify-between border-b border-lavenderSoft pb-4">
+                <h1 class="font-serif text-3xl font-bold text-violetDark flex items-center">
+                    <i class="fa-solid fa-bag-shopping mr-3 text-violetPrimary"></i> Your Shopping Bag
+                </h1>
+                <button onclick="switchPage('catalog')" class="text-xs font-bold text-violetPrimary hover:underline">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Continue Shopping
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Cart Items Container -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div id="cart-items-container" class="space-y-4">
+                        <!-- Items rendered via JS -->
+                    </div>
+
+                    <!-- Empty Cart Message -->
+                    <div id="empty-cart-msg" class="hidden glass-panel p-12 rounded-3xl text-center space-y-4">
+                        <div class="w-20 h-20 bg-lavenderSoft text-violetPrimary rounded-full flex items-center justify-center text-3xl mx-auto shadow-inner">
+                            <i class="fa-solid fa-bag-shopping"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-violetDark">Your Shopping Bag is Empty</h3>
+                        <p class="text-gray-500 text-xs max-w-sm mx-auto">Explore our collection of 10 luxury accessories to add your favorite items here.</p>
+                        <button onclick="switchPage('catalog')" class="bg-violetPrimary hover:bg-violetDark text-white px-7 py-3 rounded-full text-xs font-bold transition shadow-lg">
+                            Browse Collection
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Summary & Checkout Card -->
+                <div class="lg:col-span-1">
+                    <div class="glass-panel p-6 rounded-3xl space-y-6 shadow-xl sticky top-28">
+                        <h2 class="font-serif text-xl font-bold text-violetDark border-b border-lavenderSoft pb-3">Order Summary</h2>
+                        
+                        <div class="space-y-3 text-xs text-gray-600">
+                            <div class="flex justify-between">
+                                <span>Subtotal</span>
+                                <span id="cart-subtotal" class="font-semibold text-gray-800">₱0.00</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Estimated Shipping</span>
+                                <span id="cart-shipping" class="font-semibold text-gray-800">₱50.00</span>
+                            </div>
+                            <div class="flex justify-between text-xs text-violetPrimary bg-violetSoft/40 p-2.5 rounded-xl font-medium">
+                                <span>Promo Discount</span>
+                                <span class="font-bold">FREE SHIPPING</span>
+                            </div>
+                            <div class="border-t border-lavenderSoft pt-3 flex justify-between text-base font-bold text-violetDark">
+                                <span>Total Amount</span>
+                                <span id="cart-total" class="text-violetPrimary font-extrabold text-lg">₱0.00</span>
+                            </div>
+                        </div>
+
+                        <!-- Checkout Form -->
+                        <form id="checkoutForm" onsubmit="handleCheckout(event)" class="space-y-3.5 pt-2">
+                            <h3 class="font-bold text-violetDark text-xs uppercase tracking-wider">Shipping Details</h3>
+                            <div>
+                                <label class="block text-[11px] font-medium text-gray-700 mb-1">Full Name</label>
+                                <input type="text" required placeholder="e.g. Maria Santos" class="w-full px-3.5 py-2.5 rounded-xl text-xs border border-lavenderSoft bg-white focus:outline-none focus:ring-2 focus:ring-violetPrimary">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-medium text-gray-700 mb-1">Mobile Number</label>
+                                <input type="tel" required placeholder="09171234567" class="w-full px-3.5 py-2.5 rounded-xl text-xs border border-lavenderSoft bg-white focus:outline-none focus:ring-2 focus:ring-violetPrimary">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-medium text-gray-700 mb-1">Delivery Address</label>
+                                <textarea required rows="2" placeholder="House No., Street, Barangay, City, Province" class="w-full px-3.5 py-2.5 rounded-xl text-xs border border-lavenderSoft bg-white focus:outline-none focus:ring-2 focus:ring-violetPrimary"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-medium text-gray-700 mb-1">Payment Method</label>
+                                <select class="w-full px-3.5 py-2.5 rounded-xl text-xs border border-lavenderSoft bg-white focus:outline-none focus:ring-2 focus:ring-violetPrimary">
+                                    <option>Cash on Delivery (COD)</option>
+                                    <option>GCash / PayMaya</option>
+                                    <option>Credit / Debit Card</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="w-full bg-gradient-to-r from-violetPrimary to-purple-700 hover:from-violetDark hover:to-purple-900 text-white font-bold py-3.5 rounded-full shadow-lg transition transform hover:-translate-y-0.5 text-xs">
+                                Complete Order
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER SECTION -->
+    <footer class="bg-violetDark text-white mt-16 border-t border-purple-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="space-y-3">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-gem text-lavenderSoft text-lg"></i>
+                        <span class="text-xl font-serif font-bold tracking-wider">FEMME LUXE</span>
+                    </div>
+                    <p class="text-xs text-lavenderSoft/80 leading-relaxed">
+                        The ultimate luxury accessory boutique for women. Curated elegance delivered right to your doorstep.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-xs uppercase tracking-wider text-lavenderSoft mb-4">Quick Navigation</h4>
+                    <ul class="space-y-2 text-xs text-gray-300">
+                        <li><a href="#" onclick="switchPage('home')" class="hover:text-white transition">Home Page</a></li>
+                        <li><a href="#" onclick="switchPage('catalog')" class="hover:text-white transition">10 Accessories Collection</a></li>
+                        <li><a href="#" onclick="switchPage('cart')" class="hover:text-white transition">Shopping Bag</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-xs uppercase tracking-wider text-lavenderSoft mb-4">Customer Care</h4>
+                    <ul class="space-y-2 text-xs text-gray-300">
+                        <li><a href="#" class="hover:text-white transition">Shipping Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition">Returns & Exchange</a></li>
+                        <li><a href="#" class="hover:text-white transition">FAQs</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-xs uppercase tracking-wider text-lavenderSoft mb-4">Connect With Us</h4>
+                    <div class="flex space-x-3">
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-violetPrimary transition"><i class="fa-brands fa-instagram text-xs"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-violetPrimary transition"><i class="fa-brands fa-facebook-f text-xs"></i></a>
+                        <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-violetPrimary transition"><i class="fa-brands fa-tiktok text-xs"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-purple-900/60 mt-10 pt-6 text-center text-xs text-lavenderSoft/60">
+                <p>&copy; 2026 FEMME LUXE Boutique. All rights reserved. Designed exclusively for women.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- PRODUCT QUICK VIEW MODAL -->
+    <div id="product-modal" class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-3xl max-w-xl w-full overflow-hidden shadow-2xl transform transition-all relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-10 w-9 h-9 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="modal-content" class="p-6">
+                <!-- Modal content dynamically injected -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        /* EDIT PRODUCT ARRAY (g1.jpg to g10.jpg) */
+        const products = [
+            { id: 1,  name: "Diamond Elegance Ring",  price: 499.00, image: "g1.jpg",  rating: 4.9, reviews: 128, desc: "Elegant accessory designed for everyday sophistication." },
+            { id: 2,  name: "Crystal Bloom Hair Clips",  price: 299.00, image: "g2.jpg",  rating: 4.8, reviews: 95,  desc: "Classy statement piece that adds a touch of charm." },
+            { id: 3,  name: "Eternal Knot Pendant",  price: 389.00, image: "g3.jpg",  rating: 5.0, reviews: 210, desc: "Sparkling accessory crafted with high quality finish." },
+            { id: 4,  name: "Silver Ribbon Pendant",  price: 349.00, image: "g4.jpg",  rating: 4.7, reviews: 74,  desc: "Minimalist design perfect for subtle luxurious look." },
+            { id: 5,  name: "Golden Daisy Bracelet",  price: 450.00, image: "g5.jpg",  rating: 4.9, reviews: 156, desc: "Chic and modern wearable accessory." },
+            { id: 6,  name: "Celestial Pearl Necklace",  price: 520.00, image: "g6.jpg",  rating: 4.6, reviews: 43,  desc: "Soft and comfortable luxury styling accessory." },
+            { id: 7,  name: "Golden Ribbon Necklace",  price: 899.00, image: "g7.jpg",  rating: 4.9, reviews: 312, desc: "Premium handcrafted piece for your daily essentials." },
+            { id: 8,  name: "Starlight Layered Necklace",  price: 999.00, image: "g8.jpg",  rating: 5.0, reviews: 188, desc: "Water-resistant luxury item with sparkling detail." },
+            { id: 9,  name: "Silver Star Necklace",  price: 199.00, image: "g9.jpg",  rating: 4.8, reviews: 89,  desc: "Trendy set designed for effortless styling." },
+            { id: 10, name: "Starlight Bracelet", price: 249.00, image: "g10.jpg", rating: 4.7, reviews: 62,  desc: "Beautifully detailed piece to complete your outfit." }
+        ];
+
+        let cart = [];
+
+        function switchPage(pageId) {
+            document.getElementById('page-home').classList.add('hidden');
+            document.getElementById('page-catalog').classList.add('hidden');
+            document.getElementById('page-cart').classList.add('hidden');
+
+            document.getElementById(`page-${pageId}`).classList.remove('hidden');
+
+            ['home', 'catalog', 'cart'].forEach(p => {
+                const navBtn = document.getElementById(`nav-${p}`);
+                if (p === pageId) {
+                    navBtn.className = "px-5 py-2.5 rounded-full font-semibold text-sm transition text-violetDark bg-lavenderLight hover:bg-lavenderSoft";
+                } else {
+                    navBtn.className = "px-5 py-2.5 rounded-full font-semibold text-sm transition text-gray-600 hover:text-violetDark hover:bg-lavenderLight";
+                }
+            });
+
+            document.getElementById('mobile-menu').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function createProductCard(product) {
+            return `
+                <div class="glass-panel rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group border border-lavenderSoft">
+                    <div class="relative overflow-hidden cursor-pointer" onclick="openModal(${product.id})">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-56 object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/400x400/e9d5ff/6d28d9?text=Accessory'">
+                        <span class="absolute top-3 right-3 bg-white/90 backdrop-blur-md text-violetDark text-[11px] font-bold px-2.5 py-1 rounded-full shadow">
+                            <i class="fa-solid fa-star text-amber-400 mr-1"></i>${product.rating}
+                        </span>
+                    </div>
+
+                    <div class="p-4 flex-grow flex flex-col justify-between space-y-3">
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-violetPrimary bg-violetSoft/50 px-2.5 py-1 rounded-md">
+                                Accessory
+                            </span>
+                            <h3 class="font-bold text-gray-800 text-sm mt-2.5 group-hover:text-violetPrimary transition cursor-pointer line-clamp-1" onclick="openModal(${product.id})">
+                                ${product.name}
+                            </h3>
+                            <p class="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed">${product.desc}</p>
+                        </div>
+
+                        <div class="pt-3 border-t border-lavenderSoft flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] text-gray-400 block uppercase tracking-wider">Price</span>
+                                <span class="text-base font-bold text-violetDark">₱${product.price.toFixed(2)}</span>
+                            </div>
+                            <button onclick="addToCart(${product.id})" class="bg-violetPrimary hover:bg-violetDark text-white p-2.5 rounded-xl transition shadow flex items-center justify-center space-x-1">
+                                <i class="fa-solid fa-cart-plus text-xs"></i>
+                                <span class="text-xs font-semibold px-1">Add</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderProducts(productList = products) {
+            const homeGrid = document.getElementById('home-product-grid');
+            const catalogGrid = document.getElementById('catalog-product-grid');
+            const cardsHTML = productList.map(p => createProductCard(p)).join('');
+
+            if (homeGrid) homeGrid.innerHTML = cardsHTML;
+            if (catalogGrid) catalogGrid.innerHTML = cardsHTML;
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const existing = cart.find(item => item.id === productId);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ ...product, qty: 1 });
+            }
+
+            updateCartUI();
+            showToast(`Added "${product.name}" to your bag!`);
+        }
+
+        function updateQuantity(productId, delta) {
+            const index = cart.findIndex(item => item.id === productId);
+            if (index > -1) {
+                cart[index].qty += delta;
+                if (cart[index].qty <= 0) {
+                    cart.splice(index, 1);
+                }
+            }
+            updateCartUI();
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartUI();
+            showToast("Item removed from bag.");
+        }
+
+        function updateCartUI() {
+            const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+            document.getElementById('cart-badge').innerText = totalCount;
+            document.getElementById('cart-badge-nav').innerText = totalCount;
+
+            const container = document.getElementById('cart-items-container');
+            const emptyMsg = document.getElementById('empty-cart-msg');
+
+            if (cart.length === 0) {
+                container.innerHTML = '';
+                emptyMsg.classList.remove('hidden');
+            } else {
+                emptyMsg.classList.add('hidden');
+                container.innerHTML = cart.map(item => `
+                    <div class="glass-panel p-4 rounded-2xl flex items-center justify-between space-x-4 border border-lavenderSoft shadow-sm">
+                        <img src="${item.image}" alt="${item.name}" class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-xl flex-shrink-0" onerror="this.src='https://placehold.co/400x400/e9d5ff/6d28d9?text=Accessory'">
+                        <div class="flex-grow">
+                            <h4 class="font-bold text-violetDark text-xs sm:text-sm">${item.name}</h4>
+                            <p class="text-xs text-violetPrimary font-semibold mt-0.5">₱${item.price.toFixed(2)} each</p>
+                            
+                            <div class="flex items-center space-x-2 mt-2">
+                                <button onclick="updateQuantity(${item.id}, -1)" class="w-6 h-6 rounded-md bg-lavenderSoft text-violetDark font-bold hover:bg-violetSoft text-xs flex items-center justify-center">-</button>
+                                <span class="text-xs font-bold w-5 text-center">${item.qty}</span>
+                                <button onclick="updateQuantity(${item.id}, 1)" class="w-6 h-6 rounded-md bg-lavenderSoft text-violetDark font-bold hover:bg-violetSoft text-xs flex items-center justify-center">+</button>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="font-bold text-violetDark block text-sm sm:text-base">₱${(item.price * item.qty).toFixed(2)}</span>
+                            <button onclick="removeFromCart(${item.id})" class="text-red-500 hover:text-red-700 text-[11px] mt-2 font-medium">
+                                <i class="fa-solid fa-trash-can mr-1"></i> Remove
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const shipping = cart.length > 0 ? 50 : 0;
+            const total = subtotal + shipping;
+
+            document.getElementById('cart-subtotal').innerText = `₱${subtotal.toFixed(2)}`;
+            document.getElementById('cart-shipping').innerText = `₱${shipping.toFixed(2)}`;
+            document.getElementById('cart-total').innerText = `₱${total.toFixed(2)}`;
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query));
+            renderProducts(filtered);
+        }
+
+        function handleSearchMobile() {
+            const query = document.getElementById('searchInputMobile').value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query));
+            renderProducts(filtered);
+        }
+
+        function openModal(id) {
+            const p = products.find(item => item.id === id);
+            if (!p) return;
+
+            const modalContent = document.getElementById('modal-content');
+            modalContent.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <img src="${p.image}" class="w-full h-64 md:h-full object-cover rounded-2xl" onerror="this.src='https://placehold.co/400x400/e9d5ff/6d28d9?text=Accessory'">
+                    <div class="flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold uppercase tracking-widest text-violetPrimary bg-violetSoft/50 px-2.5 py-1 rounded-md">Femme Luxe Accessory</span>
+                            <h2 class="font-serif text-2xl font-bold text-violetDark mt-2">${p.name}</h2>
+                            <div class="flex items-center space-x-2 mt-2 text-amber-400 text-xs">
+                                <i class="fa-solid fa-star"></i>
+                                <span class="font-bold text-gray-800">${p.rating}</span>
+                                <span class="text-gray-400">(${p.reviews} verified reviews)</span>
+                            </div>
+                            <p class="text-gray-600 text-xs mt-3 leading-relaxed">${p.desc}</p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-lavenderSoft flex items-center justify-between">
+                            <span class="text-2xl font-bold text-violetDark">₱${p.price.toFixed(2)}</span>
+                            <button onclick="addToCart(${p.id}); closeModal();" class="bg-violetPrimary hover:bg-violetDark text-white px-6 py-2.5 rounded-full font-bold text-xs shadow-lg transition">
+                                <i class="fa-solid fa-bag-shopping mr-2"></i> Add to Bag
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('product-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+        }
+
+        function handleCheckout(e) {
+            e.preventDefault();
+            if (cart.length === 0) {
+                alert("Your shopping bag is empty!");
+                return;
+            }
+
+            alert("Thank you for your order! Your purchase has been processed successfully.");
+            cart = [];
+            updateCartUI();
+            switchPage('home');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').innerText = msg;
+            toast.classList.remove('translate-y-32', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-32', 'opacity-0');
+            }, 3000);
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        function scrollToFeatured() {
+            document.getElementById('featured-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        window.onload = function() {
+            renderProducts();
+            updateCartUI();
+        }
+    </script>
+</body>
+</html>
